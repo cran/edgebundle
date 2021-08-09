@@ -1,7 +1,7 @@
-cb6e89554793a663e3a75ae278e24827 *DESCRIPTION
+f557592b5439494ae36dbf713180781a *DESCRIPTION
 4c736ebf8388e5579d9b4ec73bd0c382 *LICENSE
 67a9e85651dc54bdc6f31240c0ebedc6 *NAMESPACE
-6c18b8b2f268c80dab87078af0e942d1 *NEWS.md
+6bff3baa004e7ce8d3e53182b54748a0 *NEWS.md
 99c2d5ef645ac6a2d29c56b796b0f945 *R/RcppExports.R
 fc0f29b8c0ef8675f2fbae17b441740e *R/bundle_force.R
 6ed24e8ed53bee4257ab36ebaf215791 *R/bundle_hammer.R
@@ -9,7 +9,7 @@ a340311d7dc8689e783aa4678b2446ab *R/bundle_stub.R
 c58a5536b639e733ebdc035797bd864e *R/convert_edges.R
 5e9d42871620f6baf4a4e8dff8df84af *R/data.R
 003825f9fc050ed1562943b4531f825f *R/flow_tnss.R
-f853ed382393ef0a14e884b3b81aff7b *R/metro_multicriteria.R
+abf1310bc0958675814272ee90866215 *R/metro_multicriteria.R
 aee23e10c21a15ce2b1fd4488e649467 *README.md
 5b039b04737dfb68203c28e81f07df78 *data/cali2010.rda
 c44ab95ab10903ad4615c1f1439cd460 *data/metro_berlin.rda
@@ -30,6 +30,6 @@ bcfcf4a4144296fdd86b6270865d9639 *man/tnss_tree.Rd
 69e213e99b5509061101809f3c4ccce7 *man/us_migration.Rd
 00fce3161d7fc407ee270c74bdab464d *src/RcppExports.cpp
 b0d6ea2c106f2ec9acd3d7b10a1e66fb *src/forceBundle.cpp
-d39d42662b12d3a046ac407bbbf9e3d3 *src/metroLayout.cpp
+02d983e4f3bf1aad717d6781c3745ba2 *src/metroLayout.cpp
 7d47b69ee382e096a06f68c703ee4d3a *tests/testthat.R
 cf147a7c7ddeafa542e72549c1abbde3 *tests/testthat/test-bundle_test.R
