@@ -1,3 +1,7 @@
+# edgebundle 0.3.1
+
+* minor bug fixes
+
 # edgebundle 0.3.0
 
 * added `edge_bundle_path()`
