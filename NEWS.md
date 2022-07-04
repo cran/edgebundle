@@ -1,3 +1,8 @@
+# edgebundle 0.4.0
+
+* changed line straightening in `tnss_tree()` to Visvalingam algorithm (NOTE: The meaning of the epsilon parameter is now reversed!)
+* fixed a bug in `tnss_tree()` which created duplicated mesh points
+
 # edgebundle 0.3.1
 
 * minor bug fixes

@@ -1,7 +1,7 @@
-da987d69a0eb8b1cb00a05deb2362065 *DESCRIPTION
+4cde15e4e04386a134e2cf4eecf9bebd *DESCRIPTION
 4c736ebf8388e5579d9b4ec73bd0c382 *LICENSE
-32b133bb15faef808fc6068f3e39cf93 *NAMESPACE
-af04ca4c32ca958434035b8fc2ae1b16 *NEWS.md
+6e68b3364dbe64e4d5796d8ad10fae3f *NAMESPACE
+55e4a2fe3b272a2ad2e628ea095ef0c4 *NEWS.md
 99c2d5ef645ac6a2d29c56b796b0f945 *R/RcppExports.R
 c6fc555b75cc38c4307d3a43dd6be093 *R/bundle_force.R
 14a403c520da40112cd8255236ae4f40 *R/bundle_hammer.R
@@ -9,7 +9,7 @@ c6fc555b75cc38c4307d3a43dd6be093 *R/bundle_force.R
 6825f225bcb52e933c719b1928e0e154 *R/bundle_stub.R
 c58a5536b639e733ebdc035797bd864e *R/convert_edges.R
 5e9d42871620f6baf4a4e8dff8df84af *R/data.R
-003825f9fc050ed1562943b4531f825f *R/flow_tnss.R
+374ad2d9677a4587887141aee8c72285 *R/flow_tnss.R
 abf1310bc0958675814272ee90866215 *R/metro_multicriteria.R
 2930b3b29026e62fc2771009e0d33a93 *README.md
 5b039b04737dfb68203c28e81f07df78 *data/cali2010.rda
@@ -27,11 +27,11 @@ dfe89a697ab903236f01ca85ce98be8d *man/metro_berlin.Rd
 b4be162cf1736aff8a250f73cf196067 *man/metro_multicriteria.Rd
 40845c5e1ed1a9bdacef63f5c134e6dc *man/tnss_dummies.Rd
 34aeb89fcbcdc858a368f06481960d53 *man/tnss_smooth.Rd
-bcfcf4a4144296fdd86b6270865d9639 *man/tnss_tree.Rd
+afe92bf0db715e623bcf2be137fe0ed8 *man/tnss_tree.Rd
 05458d96c82152c148c6dccf8f32db30 *man/us_flights.Rd
 69e213e99b5509061101809f3c4ccce7 *man/us_migration.Rd
 2e3767524ef7b1a63687d44e70af4922 *src/RcppExports.cpp
-b0d6ea2c106f2ec9acd3d7b10a1e66fb *src/forceBundle.cpp
+85c6f78e32ed11ec5334e5825e9ff7a9 *src/forceBundle.cpp
 02d983e4f3bf1aad717d6781c3745ba2 *src/metroLayout.cpp
 7d47b69ee382e096a06f68c703ee4d3a *tests/testthat.R
 cf147a7c7ddeafa542e72549c1abbde3 *tests/testthat/test-bundle_test.R
