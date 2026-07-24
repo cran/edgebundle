@@ -10,14 +10,36 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// force_bundle_iter
-List force_bundle_iter(NumericMatrix edges_xy, List elist, double K, int C, int P, int P_rate, double S, int I, double I_rate, double compatibility_threshold, double eps);
-RcppExport SEXP _edgebundle_force_bundle_iter(SEXP edges_xySEXP, SEXP elistSEXP, SEXP KSEXP, SEXP CSEXP, SEXP PSEXP, SEXP P_rateSEXP, SEXP SSEXP, SEXP ISEXP, SEXP I_rateSEXP, SEXP compatibility_thresholdSEXP, SEXP epsSEXP) {
+// divided_bundle_iter
+List divided_bundle_iter(NumericMatrix edges_xy, IntegerMatrix el, NumericMatrix node_dist, NumericVector weight, double ks, double kC, double l, double s, double f, double dt, int npass, int nstep, bool use_connectivity);
+RcppExport SEXP _edgebundle_divided_bundle_iter(SEXP edges_xySEXP, SEXP elSEXP, SEXP node_distSEXP, SEXP weightSEXP, SEXP ksSEXP, SEXP kCSEXP, SEXP lSEXP, SEXP sSEXP, SEXP fSEXP, SEXP dtSEXP, SEXP npassSEXP, SEXP nstepSEXP, SEXP use_connectivitySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type edges_xy(edges_xySEXP);
-    Rcpp::traits::input_parameter< List >::type elist(elistSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type el(elSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type node_dist(node_distSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< double >::type ks(ksSEXP);
+    Rcpp::traits::input_parameter< double >::type kC(kCSEXP);
+    Rcpp::traits::input_parameter< double >::type l(lSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< int >::type npass(npassSEXP);
+    Rcpp::traits::input_parameter< int >::type nstep(nstepSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_connectivity(use_connectivitySEXP);
+    rcpp_result_gen = Rcpp::wrap(divided_bundle_iter(edges_xy, el, node_dist, weight, ks, kC, l, s, f, dt, npass, nstep, use_connectivity));
+    return rcpp_result_gen;
+END_RCPP
+}
+// force_bundle_iter
+List force_bundle_iter(NumericMatrix edges_xy, double K, int C, int P, int P_rate, double S, int I, double I_rate, double compatibility_threshold, double eps);
+RcppExport SEXP _edgebundle_force_bundle_iter(SEXP edges_xySEXP, SEXP KSEXP, SEXP CSEXP, SEXP PSEXP, SEXP P_rateSEXP, SEXP SSEXP, SEXP ISEXP, SEXP I_rateSEXP, SEXP compatibility_thresholdSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type edges_xy(edges_xySEXP);
     Rcpp::traits::input_parameter< double >::type K(KSEXP);
     Rcpp::traits::input_parameter< int >::type C(CSEXP);
     Rcpp::traits::input_parameter< int >::type P(PSEXP);
@@ -27,7 +49,25 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type I_rate(I_rateSEXP);
     Rcpp::traits::input_parameter< double >::type compatibility_threshold(compatibility_thresholdSEXP);
     Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
-    rcpp_result_gen = Rcpp::wrap(force_bundle_iter(edges_xy, elist, K, C, P, P_rate, S, I, I_rate, compatibility_threshold, eps));
+    rcpp_result_gen = Rcpp::wrap(force_bundle_iter(edges_xy, K, C, P, P_rate, S, I, I_rate, compatibility_threshold, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kdeeb_iter
+List kdeeb_iter(NumericMatrix edges_xy, int npoints, int niter, double bw, double decay, int grid, double step, int smooth_passes);
+RcppExport SEXP _edgebundle_kdeeb_iter(SEXP edges_xySEXP, SEXP npointsSEXP, SEXP niterSEXP, SEXP bwSEXP, SEXP decaySEXP, SEXP gridSEXP, SEXP stepSEXP, SEXP smooth_passesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type edges_xy(edges_xySEXP);
+    Rcpp::traits::input_parameter< int >::type npoints(npointsSEXP);
+    Rcpp::traits::input_parameter< int >::type niter(niterSEXP);
+    Rcpp::traits::input_parameter< double >::type bw(bwSEXP);
+    Rcpp::traits::input_parameter< double >::type decay(decaySEXP);
+    Rcpp::traits::input_parameter< int >::type grid(gridSEXP);
+    Rcpp::traits::input_parameter< double >::type step(stepSEXP);
+    Rcpp::traits::input_parameter< int >::type smooth_passes(smooth_passesSEXP);
+    rcpp_result_gen = Rcpp::wrap(kdeeb_iter(edges_xy, npoints, niter, bw, decay, grid, step, smooth_passes));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -109,15 +149,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mingle_iter
+List mingle_iter(NumericMatrix edges_xy, int k, int segments, double bundle_strength);
+RcppExport SEXP _edgebundle_mingle_iter(SEXP edges_xySEXP, SEXP kSEXP, SEXP segmentsSEXP, SEXP bundle_strengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type edges_xy(edges_xySEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< int >::type segments(segmentsSEXP);
+    Rcpp::traits::input_parameter< double >::type bundle_strength(bundle_strengthSEXP);
+    rcpp_result_gen = Rcpp::wrap(mingle_iter(edges_xy, k, segments, bundle_strength));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_edgebundle_force_bundle_iter", (DL_FUNC) &_edgebundle_force_bundle_iter, 11},
+    {"_edgebundle_divided_bundle_iter", (DL_FUNC) &_edgebundle_divided_bundle_iter, 13},
+    {"_edgebundle_force_bundle_iter", (DL_FUNC) &_edgebundle_force_bundle_iter, 10},
+    {"_edgebundle_kdeeb_iter", (DL_FUNC) &_edgebundle_kdeeb_iter, 8},
     {"_edgebundle_criterion_angular_resolution", (DL_FUNC) &_edgebundle_criterion_angular_resolution, 2},
     {"_edgebundle_criterion_edge_length", (DL_FUNC) &_edgebundle_criterion_edge_length, 3},
     {"_edgebundle_criterion_balanced_edge_length", (DL_FUNC) &_edgebundle_criterion_balanced_edge_length, 2},
     {"_edgebundle_criterion_line_straightness", (DL_FUNC) &_edgebundle_criterion_line_straightness, 0},
     {"_edgebundle_criterion_octilinearity", (DL_FUNC) &_edgebundle_criterion_octilinearity, 2},
     {"_edgebundle_layout_as_metro_iter", (DL_FUNC) &_edgebundle_layout_as_metro_iter, 9},
+    {"_edgebundle_mingle_iter", (DL_FUNC) &_edgebundle_mingle_iter, 4},
     {NULL, NULL, 0}
 };
 

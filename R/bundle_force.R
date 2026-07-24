@@ -12,12 +12,20 @@
 #' @param I_rate rate of iteration decrease per cycle
 #' @param compatibility_threshold threshold for when edges are considered compatible
 #' @param eps accuracy
+#' @param directed logical. If `TRUE`, use divided edge bundling (Selassie et al.
+#'   2011) which keeps edges running in opposite directions in separate lanes.
+#'   Requires an igraph/tbl_graph object with edge directions.
+#' @param ... arguments passed to the divided bundler when `directed = TRUE`:
+#'   `lane_width`, `k_spring`, `k_charge`, `decay`, `friction`, `step`, `passes`,
+#'   `iterations`, `use_connectivity`.
 #' @return data.frame containing the bundled edges
 #' @author David Schoch
 #' @details see [online](https://github.com/schochastics/edgebundle) for plotting tips
 #' @seealso [edge_bundle_hammer],[edge_bundle_stub],[edge_bundle_path]
 #' @references
 #' Holten, Danny, and Jarke J. Van Wijk. "Force-Directed Edge Bundling for Graph Visualization." Computer Graphics Forum (Blackwell Publishing Ltd) 28, no. 3 (2009): 983-990.
+#'
+#' Selassie, David, Brandon Heller, and Jeffrey Heer. "Divided edge bundling for directional network data." IEEE Transactions on Visualization and Computer Graphics 17, no. 12 (2011): 2354-2363.
 #' @examples
 #' library(igraph)
 #' g <- graph_from_edgelist(
@@ -33,36 +41,19 @@
 edge_bundle_force <- function(object, xy, K = 1, C = 6, P = 1, S = 0.04,
                               P_rate = 2, I = 50, I_rate = 2 / 3,
                               compatibility_threshold = 0.6,
-                              eps = 1e-8) {
-    # initialize matrix with coordinates
-    edges_xy <- convert_edges(object, xy)
+                              eps = 1e-8, directed = FALSE, ...) {
+    if (directed) {
+        return(.edge_bundle_divided(object, xy, ...))
+    }
+    edges_xy <- .bundle_inputs(object, xy)$exy
     m <- nrow(edges_xy)
 
-    # initialize edge subdivision list
-    elist <- unname(lapply(
-        split(edges_xy, rep(seq_len(nrow(edges_xy)), ncol(edges_xy))),
-        function(y) matrix(y, 2, 2, byrow = TRUE)
-    ))
-
-    # main force bundling routine
     elist <- force_bundle_iter(
-        edges_xy, elist, K, C, P, P_rate,
+        edges_xy, K, C, P, P_rate,
         S, I, I_rate, compatibility_threshold, eps
     )
 
-    # assemble data frame
-    segments <- nrow(elist[[1]])
-
-    idx <- seq(0, 1, length.out = segments)
-    data_bundle <- as.data.frame(cbind(
-        do.call("rbind", elist),
-        rep(idx, m),
-        rep(1:m, each = segments)
-    ))
-
-    names(data_bundle) <- c("x", "y", "index", "group")
-
-    data_bundle
+    .as_bundle_df(do.call("rbind", elist), m, nrow(elist[[1]]))
 }
 
 #' @importFrom Rcpp sourceCpp

@@ -9,10 +9,11 @@
 An R package that implements several edge bundling/flow and metro map algorithms.
 It includes:
 \itemize{
-\item Force directed edge bundling \code{edge_bundle_force()}
+\item Force directed edge bundling \code{edge_bundle_force()} (with a divided/directed variant)
 \item Stub bundling  \code{edge_bundle_stub()}
-\item Hammer bundling  \code{edge_bundle_hammer()}
+\item Hammer bundling (KDE) \code{edge_bundle_hammer()}
 \item Edge-path bundling  \code{edge_bundle_path()}
+\item MINGLE bundling  \code{edge_bundle_mingle()}
 \item TNSS flow map \verb{tnss_*()}
 \item Multicriteria Metro map layout \code{metro_multicriteria()}
 }
@@ -28,6 +29,16 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: David Schoch \email{david@schochastics.net} (\href{https://orcid.org/0000-0003-2952-4812}{ORCID})
+
+Authors:
+\itemize{
+  \item David Schoch \email{david@schochastics.net} (\href{https://orcid.org/0000-0003-2952-4812}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Jose Luis Blanco-Claraco (Author of the bundled nanoflann C++ library) [copyright holder]
+}
 
 }
 \keyword{internal}

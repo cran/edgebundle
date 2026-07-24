@@ -1,5 +1,7 @@
-#' @title Metro Map Layout
-#' @description Metro map layout based on multicriteria optimization
+#' @title Metro Map Layout (deprecated)
+#' @description Metro map layout based on multicriteria optimization.
+#' **Deprecated**: use `graphlayouts::layout_as_metromap()` instead, which now
+#' provides this layout.
 #' @param object original graph
 #' @param xy initial layout of the original graph
 #' @param l desired multiple of grid point spacing. (l*gr determines desired edge length)
@@ -27,10 +29,13 @@
 #' xy_new <- metro_multicriteria(g, xy, l = 2, gr = 0.5, w = c(100, 100, 1, 1, 100), bsize = 35)
 #' @export
 metro_multicriteria <- function(object, xy, l = 2, gr = 0.0025, w = rep(1, 5), bsize = 5) {
+    .Deprecated("graphlayouts::layout_as_metromap",
+        msg = "metro_multicriteria() is deprecated; use graphlayouts::layout_as_metromap() instead."
+    )
     adj <- as_adj_list1(object)
     adj <- lapply(adj, function(x) x - 1)
     adj_deg2 <- adj[unlist(lapply(adj, length)) == 2]
-    el <- igraph::get.edgelist(object, FALSE) - 1
+    el <- igraph::as_edgelist(object, FALSE) - 1
 
     xy <- snap_to_grid(xy, gr)
 

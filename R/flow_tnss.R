@@ -58,7 +58,7 @@ tnss_dummies <- function(xy, root,
         pts_tr <- c(max(xy[, 1]), max(xy[, 2]))
         pts_br <- c(max(xy[, 1]), min(xy[, 2]))
         pts_bl <- c(min(xy[, 1]), min(xy[, 2]))
-        pts_tl <- c(max(xy[, 1]), max(xy[, 2]))
+        pts_tl <- c(min(xy[, 1]), max(xy[, 2]))
         pts_extra <- rbind(pts_tr, pts_br, pts_bl, pts_tl)
         tseq <- seq(0.1, 0.9, length.out = ndiag)
         xy_extra <- do.call(rbind, lapply(1:4, function(x) cbind(pts_extra[x, 1] * tseq + xy[root, 1] * (1 - tseq), pts_extra[x, 2] * tseq + xy[root, 2] * (1 - tseq))))
@@ -84,7 +84,10 @@ tnss_dummies <- function(xy, root,
 }
 
 #' @title Create Steiner tree from real and dummy points
-#' @description creates an approximated Steiner tree for a flow map visualization
+#' @description Creates an approximated Steiner tree for a flow map
+#' visualization. For most purposes [flow_tree] is now the recommended flow map
+#' layout (planar, angle-restricted, no dummy nodes); `tnss_tree` is kept as an
+#' alternative and requires the `interp` package for triangulation.
 #' @param g original flow network (must be a one-to-many flow network, i.e star graph). Must have a weight attribute indicating the flow
 #' @param xy coordinates of "real" nodes
 #' @param xydummy coordinates of "dummy" nodes
@@ -104,6 +107,9 @@ tnss_dummies <- function(xy, root,
 #' @export
 
 tnss_tree <- function(g, xy, xydummy, root, gamma = 0.9, epsilon = 0.3, elen = Inf, order = "random") {
+    if (!requireNamespace("interp", quietly = TRUE)) {
+        stop("The `interp` package is required for tnss_tree(); install it, or use flow_tree() which needs no triangulation.")
+    }
     xymesh <- rbind(xy, xydummy)
 
     n <- nrow(xy)
@@ -122,16 +128,16 @@ tnss_tree <- function(g, xy, xydummy, root, gamma = 0.9, epsilon = 0.3, elen = I
     igraph::V(g1)$y <- xymesh[, 2]
 
     # delete edges that are too long
-    el <- igraph::get.edgelist(g1, FALSE)
+    el <- igraph::as_edgelist(g1, FALSE)
     edges_xy <- cbind(xymesh[el[, 1], 1], xymesh[el[, 1], 2], xymesh[el[, 2], 1], xymesh[el[, 2], 2])
     dist <- apply(edges_xy, 1, function(x) sqrt((x[1] - x[3])^2 + (x[2] - x[4])^2))
     idx <- which(dist > elen)
     if (length(idx) != 0) {
-        g1 <- igraph::delete.edges(g1, idx)
+        g1 <- igraph::delete_edges(g1, idx)
     }
 
     # edge weights from distances
-    el <- igraph::get.edgelist(g1, FALSE)
+    el <- igraph::as_edgelist(g1, FALSE)
     edges_xy <- cbind(xymesh[el[, 1], 1], xymesh[el[, 1], 2], xymesh[el[, 2], 1], xymesh[el[, 2], 2])
     igraph::E(g1)$weight <- apply(edges_xy, 1, function(x) sqrt((x[1] - x[3])^2 + (x[2] - x[4])^2))
 
@@ -140,9 +146,9 @@ tnss_tree <- function(g, xy, xydummy, root, gamma = 0.9, epsilon = 0.3, elen = I
     sp_edges <- vector("list", length(leafs))
     k <- 0
 
-    g2 <- igraph::as.directed(g1, "mutual")
-    ide <- which(igraph::get.edgelist(g2, FALSE)[, 1] %in% leafs)
-    g2 <- igraph::delete.edges(g2, ide)
+    g2 <- igraph::as_directed(g1, "mutual")
+    ide <- which(igraph::as_edgelist(g2, FALSE)[, 1] %in% leafs)
+    g2 <- igraph::delete_edges(g2, ide)
 
 
     dist2root <- sqrt((xy[root, 1] - xy[leafs, 1])^2 + (xy[root, 2] - xy[leafs, 2])^2)
@@ -153,7 +159,10 @@ tnss_tree <- function(g, xy, xydummy, root, gamma = 0.9, epsilon = 0.3, elen = I
     } else if (order == "far") {
         leafs <- leafs[order(dist2root, decreasing = TRUE)]
     } else if (order == "weight") {
-        leafs <- leafs
+        el0 <- igraph::as_edgelist(g, names = FALSE)
+        wall <- igraph::E(g)$weight
+        wleaf <- vapply(leafs, function(lf) sum(wall[el0[, 1] == lf | el0[, 2] == lf]), numeric(1))
+        leafs <- leafs[order(wleaf, decreasing = TRUE)]
     } else {
         leafs <- sample(leafs)
     }
@@ -168,13 +177,13 @@ tnss_tree <- function(g, xy, xydummy, root, gamma = 0.9, epsilon = 0.3, elen = I
     del_nodes <- unique(unlist(sp_nodes))
     del_edges <- unique(unlist(sp_edges))
 
-    g3 <- igraph::delete.edges(g2, which(!((1:igraph::ecount(g2)) %in% del_edges)))
+    g3 <- igraph::delete_edges(g2, which(!((1:igraph::ecount(g2)) %in% del_edges)))
     idx <- which(!igraph::V(g3) %in% del_nodes)
-    g3 <- igraph::delete.vertices(g3, idx)
+    g3 <- igraph::delete_vertices(g3, idx)
 
     # straighten edges
     xymesh1 <- xymesh[-idx, ]
-    g4 <- igraph::as.undirected(g3)
+    g4 <- igraph::as_undirected(g3)
     g4 <- igraph::delete_edge_attr(g4, "weight")
     deg <- igraph::degree(g4)
     del2 <- c()
@@ -199,14 +208,14 @@ tnss_tree <- function(g, xy, xydummy, root, gamma = 0.9, epsilon = 0.3, elen = I
     g5 <- g4
     for (v in del2_name) {
         ni <- igraph::neighborhood(g5, 1, v, mindist = 1)
-        g5 <- igraph::add.edges(g5, unlist(igraph::neighborhood(g5, 1, v, mindist = 1)))
+        g5 <- igraph::add_edges(g5, unlist(igraph::neighborhood(g5, 1, v, mindist = 1)))
         g5 <- igraph::delete_vertices(g5, v)
     }
 
     # calculate flow from edge weight
     gfinal <- g5
     igraph::E(gfinal)$flow <- 0
-    el <- igraph::get.edgelist(g, FALSE)
+    el <- igraph::as_edgelist(g, FALSE)
     for (dest in leafs) {
         ide <- which(el[, 1] == dest | el[, 2] == dest)
         w <- igraph::E(g)$weight[ide]
@@ -244,7 +253,7 @@ tnss_smooth <- function(g, bw = 3, n = 10) {
     root <- which(igraph::V(g)$tnss == "root")
     leafs <- which(igraph::V(g)$tnss == "leaf")
 
-    el <- igraph::get.edgelist(g, names = FALSE)
+    el <- igraph::as_edgelist(g, names = FALSE)
     xy <- cbind(igraph::V(g)$x, igraph::V(g)$y)
 
     ord <- order(igraph::distances(g, root, leafs), decreasing = TRUE)
@@ -276,45 +285,6 @@ tnss_smooth <- function(g, bw = 3, n = 10) {
 }
 
 # helpers ----
-DouglasPeucker <- function(points, epsilon) {
-    dmax <- 0
-    index <- 0
-    end <- nrow(points)
-    ResultList <- numeric(0)
-    if (end < 3) {
-        return(ResultList <- rbind(ResultList, points))
-    }
-    for (i in 2:(end - 1)) {
-        d <- ShortestDistance(points[i, ], line = rbind(points[1, ], points[end, ]))
-        if (d > dmax) {
-            index <- i
-            dmax <- d
-        }
-    }
-    # if dmax is greater than epsilon recursively apply
-    if (dmax > epsilon) {
-        recResults1 <- DouglasPeucker(points[1:index, ], epsilon)
-        recResults2 <- DouglasPeucker(points[index:end, ], epsilon)
-        ResultList <- rbind(ResultList, recResults1, recResults2)
-    } else {
-        ResultList <- rbind(ResultList, points[1, ], points[end, ])
-    }
-    ResultList <- as.matrix(ResultList[!duplicated(ResultList), ])
-    colnames(ResultList) <- c("x", "p")
-    return(ResultList)
-}
-
-ShortestDistance <- function(p, line) {
-    x1 <- line[1, 1]
-    y1 <- line[1, 2]
-    x2 <- line[2, 1]
-    y2 <- line[2, 2]
-    x0 <- p[1]
-    y0 <- p[2]
-    d <- abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt((y2 - y1)^2 + (x2 - x1)^2)
-    return(as.numeric(d))
-}
-
 point_distance <- function(x) {
     d <- diff(x)
     sqrt(d[, 1]^2 + d[, 2]^2)
