@@ -1,7 +1,7 @@
-9e95c2d8e28d6971261615d403c7cc77 *DESCRIPTION
+fb3e96308c127660144c56a37729a294 *DESCRIPTION
 4c736ebf8388e5579d9b4ec73bd0c382 *LICENSE
-c502fe12a3d3ea45dbbf55713073f78e *NAMESPACE
-1ec08d2e88dfa9a3651c868c6218e14d *NEWS.md
+1e393f0db9a6d9fb17a9e143c8fd8c2f *NAMESPACE
+ebf6ee966cb72032da8e1997d3fd04e3 *NEWS.md
 38ade977e05d5566f0c5e3fdc88dbd7b *R/RcppExports.R
 aadce894bf6ae90b773069541fdbab7b *R/bundle_divided.R
 4515730ec68f545e706f9a84e0718bdc *R/bundle_force.R
@@ -14,7 +14,7 @@ bf596963508191bf712fcb5a51602de2 *R/data.R
 4f784ce789c67e907544944e5c837f34 *R/edge_bundle.R
 41016e83a97734d7bb71bf1a41bcbc57 *R/edgebundle-package.R
 68293fe64665518e192ba83ab2cb0bc8 *R/flow_spiral.R
-cb3f4d465b9bc00a410ff3ccb0d16615 *R/flow_tnss.R
+62075fd9bd582d5ed38e40303cd45378 *R/flow_tnss.R
 3a60d325efa0fff764a50002d87e2006 *R/metro_multicriteria.R
 39cf70f2f3b976a63097719257b56fda *R/utils-bundle.R
 69a357fbd81a7deb4cd575ba2a9abea7 *README.md
@@ -63,4 +63,4 @@ d537a2df385de391626accbb53d1c706 *tests/testthat/test-mingle.R
 466d9a6a01a448b8078c90c3ed046d7e *tests/testthat/test-no-deprecation.R
 98092718b4181d20168c2ec3c71805e6 *tests/testthat/test-path.R
 58c2a5292bf5b1a444cf30a248e009e0 *tests/testthat/test-stub.R
-f3dd5997d1ac6f5a841869849960becd *tests/testthat/test-tnss.R
+fefb1852fb511c91fa123028d8d4eb5e *tests/testthat/test-tnss.R
